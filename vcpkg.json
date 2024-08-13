@@ -1,0 +1,15 @@
+{
+    "name": "cpp-coroutines",
+    "version": "0.0.1",
+    "builtin-baseline": "cacf5994341f27e9a14a7b8724b0634b138ecb30",
+    "dependencies": [
+        {
+            "name": "catch2",
+            "version>=": "3.6.0"
+        },
+        {
+            "name": "fakeit",
+            "version>=": "2.4.0#2"
+        }
+    ]
+}
