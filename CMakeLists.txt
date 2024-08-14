@@ -19,4 +19,6 @@ include(cmake/StaticAnalyzers.cmake)
 # sanitizers
 include(cmake/Sanitizers.cmake)
 
+find_package(nanobench CONFIG REQUIRED)
+
 add_subdirectory(src/manual)

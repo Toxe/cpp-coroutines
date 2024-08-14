@@ -10,6 +10,10 @@
         {
             "name": "fakeit",
             "version>=": "2.4.0#2"
+        },
+        {
+            "name": "nanobench",
+            "version>=": "4.3.11"
         }
     ]
 }
