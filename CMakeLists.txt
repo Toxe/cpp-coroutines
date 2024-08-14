@@ -19,9 +19,12 @@ include(cmake/StaticAnalyzers.cmake)
 # sanitizers
 include(cmake/Sanitizers.cmake)
 
+find_package(PkgConfig REQUIRED)
 find_package(nanobench CONFIG REQUIRED)
 find_package(cppcoro CONFIG REQUIRED)
+pkg_check_modules(libcoro REQUIRED IMPORTED_TARGET libcoro)
 
 add_subdirectory(src/cppcoro)
+add_subdirectory(src/libcoro)
 add_subdirectory(src/manual)
 add_subdirectory(src/functions)
