@@ -22,3 +22,4 @@ include(cmake/Sanitizers.cmake)
 find_package(nanobench CONFIG REQUIRED)
 
 add_subdirectory(src/manual)
+add_subdirectory(src/functions)
