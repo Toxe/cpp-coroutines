@@ -12,6 +12,10 @@
             "version>=": "2.4.0#2"
         },
         {
+            "name": "cppcoro",
+            "version>=": "2022-10-25"
+        },
+        {
             "name": "nanobench",
             "version>=": "4.3.11"
         }
