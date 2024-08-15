@@ -1,32 +1,15 @@
 #include <cassert>
-#include <iostream>
-#include <string_view>
-#include <utility>
 
 #define ANKERL_NANOBENCH_IMPLEMENT
 #include "nanobench.h"
 
-void print_and_assert_result(const std::string_view label, const uint64_t expected, const uint64_t result)
-{
-    assert(result == expected);
-    std::cout << label << ": " << result << '\n';
-}
-
-uint64_t fibonacci(const int nth)
-{
-    uint64_t a = 0;
-    uint64_t b = 1;
-
-    for (int i = 0; i < nth; ++i)
-        a = std::exchange(b, a + b);
-
-    return a;
-}
+#include "fibonacci.hpp"
+#include "print_and_assert_result.hpp"
 
 void run_fibonacci()
 {
-    print_and_assert_result("fibonacci(10)", 55, fibonacci(10));
-    print_and_assert_result("fibonacci(20)", 6765, fibonacci(20));
+    print_and_assert_result<uint64_t>("fibonacci(10)", 55, fibonacci(10));
+    print_and_assert_result<uint64_t>("fibonacci(20)", 6765, fibonacci(20));
 }
 
 void run_simple_tasks()

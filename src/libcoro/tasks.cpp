@@ -1,39 +1,24 @@
 #include <cassert>
-#include <iostream>
-#include <string_view>
-#include <utility>
 
 #define ANKERL_NANOBENCH_IMPLEMENT
 #include "nanobench.h"
 
 #include "coro/coro.hpp"
 
-void print_and_assert_result(const std::string_view label, const uint64_t expected, const uint64_t result)
-{
-    assert(result == expected);
-    std::cout << label << ": " << result << '\n';
-}
+#include "fibonacci.hpp"
+#include "print_and_assert_result.hpp"
 
-coro::task<uint64_t> fibonacci(const int nth)
-{
-    uint64_t a = 0;
-    uint64_t b = 1;
-
-    for (int i = 0; i < nth; ++i)
-        a = std::exchange(b, a + b);
-
-    co_return a;
-}
+coro::task<uint64_t> fibonacci_coro(const int nth) { co_return fibonacci(nth); }
 
 void run_fibonacci()
 {
     // create new tasks but don't start executing the coroutines yet
-    const coro::task<uint64_t> fibonacci10_task = fibonacci(10);
-    const coro::task<uint64_t> fibonacci20_task = fibonacci(20);
+    const coro::task<uint64_t> fibonacci10_task = fibonacci_coro(10);
+    const coro::task<uint64_t> fibonacci20_task = fibonacci_coro(20);
 
     // execute the coroutines
-    print_and_assert_result("fibonacci(10)", 55, coro::sync_wait(fibonacci10_task));
-    print_and_assert_result("fibonacci(20)", 6765, coro::sync_wait(fibonacci20_task));
+    print_and_assert_result<uint64_t>("fibonacci(10)", 55, coro::sync_wait(fibonacci10_task));
+    print_and_assert_result<uint64_t>("fibonacci(20)", 6765, coro::sync_wait(fibonacci20_task));
 }
 
 void run_simple_tasks()
@@ -63,7 +48,7 @@ void benchmark()
         assert(result == 405);
     });
 
-    const coro::task<uint64_t> fibonacci_task = fibonacci(20);
+    const coro::task<uint64_t> fibonacci_task = fibonacci_coro(20);
 
     ankerl::nanobench::Bench().run("libcoro: fibonacci", [&] {
         const auto result = coro::sync_wait(fibonacci_task);
