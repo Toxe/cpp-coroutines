@@ -43,7 +43,7 @@ void benchmark()
     auto double_task = [](int n) -> int { return n * 2; };
     auto double_and_add_five_task = [&](int n) -> int { return double_task(100) + n; };
 
-    ankerl::nanobench::Bench().run("functions: simple_tasks", [&] {
+    ankerl::nanobench::Bench().run("reference: simple_tasks", [&] {
         const auto a = double_task(100);
         const auto b = double_and_add_five_task(5);
         const auto result = a + b;
@@ -51,7 +51,7 @@ void benchmark()
         assert(result == 405);
     });
 
-    ankerl::nanobench::Bench().run("functions: fibonacci", [] {
+    ankerl::nanobench::Bench().run("reference: fibonacci", [] {
         const auto result = fibonacci(20);
         ankerl::nanobench::doNotOptimizeAway(result);
         assert(result == 6765);
