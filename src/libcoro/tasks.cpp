@@ -37,10 +37,10 @@ void run_simple_tasks()
 
 void benchmark()
 {
-    const auto double100_task = [](const int n) -> coro::task<int> { co_return n * 2; }(100);
-    const auto double100_and_add_five_task = [&](const int n) -> coro::task<int> { co_return co_await double100_task + n; }(5);
-
     ankerl::nanobench::Bench().run("libcoro: simple_tasks", [&] {
+        const auto double100_task = [](const int n) -> coro::task<int> { co_return n * 2; }(100);
+        const auto double100_and_add_five_task = [&](const int n) -> coro::task<int> { co_return co_await double100_task + n; }(5);
+
         const auto a = coro::sync_wait(double100_task);
         const auto b = coro::sync_wait(double100_and_add_five_task);
         const auto result = a + b;
@@ -48,9 +48,9 @@ void benchmark()
         assert(result == 405);
     });
 
-    const coro::task<uint64_t> fibonacci_task = fibonacci_coro(20);
-
     ankerl::nanobench::Bench().run("libcoro: fibonacci", [&] {
+        const coro::task<uint64_t> fibonacci_task = fibonacci_coro(20);
+
         const auto result = coro::sync_wait(fibonacci_task);
         ankerl::nanobench::doNotOptimizeAway(result);
         assert(result == 6765);
