@@ -1,4 +1,5 @@
 add_library(lib_shared
+    ctrack.hpp
     fibonacci.cpp
     fibonacci.hpp
     print_and_assert_result.hpp
