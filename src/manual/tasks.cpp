@@ -46,48 +46,36 @@ struct Task {
 
 Task<uint64_t> fibonacci_coro(const int nth) { co_return fibonacci(nth); }
 
-void run_fibonacci()
-{
-    // create new tasks but don't start executing the coroutines yet
-    Task<uint64_t> fibonacci10_task = fibonacci_coro(10);
-    Task<uint64_t> fibonacci20_task = fibonacci_coro(20);
-
-    // execute the coroutines
-    print_and_assert_result<uint64_t>("fibonacci(10)", 55, fibonacci10_task.result());
-    print_and_assert_result<uint64_t>("fibonacci(20)", 6765, fibonacci20_task.result());
-}
-
 void run_simple_tasks()
 {
-    // create new tasks but don't start executing the coroutines yet
-    auto make_double_task = [](const int n) -> Task<int> { co_return n * 2; };
-    auto double100_task = make_double_task(100);
+    const auto double_coro = [](const int n) -> Task<int> { co_return n * 2; };
+    const auto double_100_and_add_coro = [&](const int n) -> Task<int> { co_return double_coro(100).result() + n; };
 
-    auto make_double100_and_add_task = [&](const int n) -> Task<int> { co_return co_await double100_task + n; };
-    auto double100_and_add_five_task = make_double100_and_add_task(5);
+    print_and_assert_result("double_coro", 400, double_coro(200).result());
+    print_and_assert_result("double_100_and_add_coro", 205, double_100_and_add_coro(5).result());
+}
 
-    // execute the coroutines
-    print_and_assert_result("double100_task", 200, double100_task.result());
-    print_and_assert_result("double100_and_add_five_task", 205, double100_and_add_five_task.result());
+void run_fibonacci()
+{
+    print_and_assert_result<uint64_t>("fibonacci_coro(10)", 55, fibonacci_coro(10).result());
+    print_and_assert_result<uint64_t>("fibonacci_coro(20)", 6765, fibonacci_coro(20).result());
 }
 
 void benchmark()
 {
     ankerl::nanobench::Bench().run("manual: simple_tasks", [&] {
-        auto double100_task = [](const int n) -> Task<int> { co_return n * 2; }(100);
-        auto double100_and_add_five_task = [&](const int n) -> Task<int> { co_return co_await double100_task + n; }(5);
+        const auto double_coro = [](const int n) -> Task<int> { co_return n * 2; };
+        const auto double_100_and_add_coro = [&](const int n) -> Task<int> { co_return double_coro(100).result() + n; };
 
-        const auto a = double100_task.result();
-        const auto b = double100_and_add_five_task.result();
+        const auto a = double_coro(200).result();
+        const auto b = double_100_and_add_coro(5).result();
         const auto result = a + b;
         ankerl::nanobench::doNotOptimizeAway(result);
-        assert(result == 405);
+        assert(result == 605);
     });
 
     ankerl::nanobench::Bench().run("manual: fibonacci", [&] {
-        Task<uint64_t> fibonacci_task = fibonacci_coro(20);
-
-        const auto result = fibonacci_task.result();
+        const auto result = fibonacci_coro(20).result();
         ankerl::nanobench::doNotOptimizeAway(result);
         assert(result == 6765);
     });
