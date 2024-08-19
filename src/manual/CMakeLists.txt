@@ -1,4 +1,5 @@
 set(ALL_TARGETS
+    generator
     tasks
     uppercase
 )
