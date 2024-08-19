@@ -21,6 +21,7 @@ include(cmake/Sanitizers.cmake)
 
 find_package(PkgConfig REQUIRED)
 find_package(nanobench CONFIG REQUIRED)
+find_package(concurrencpp CONFIG REQUIRED)
 find_package(cppcoro CONFIG REQUIRED)
 pkg_check_modules(libcoro REQUIRED IMPORTED_TARGET libcoro)
 

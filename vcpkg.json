@@ -12,6 +12,10 @@
             "version>=": "2.4.0#2"
         },
         {
+            "name": "concurrencpp",
+            "version>=": "0.1.7#1"
+        },
+        {
             "name": "cppcoro",
             "version>=": "2022-10-25"
         },
