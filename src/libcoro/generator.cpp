@@ -35,14 +35,25 @@ void run_infinite_counter()
     print_and_assert_result("infinite_counter", 500500, sum);
 }
 
-void run_finite_counter()
+void run_finite_counter_iterator()
+{
+    auto gen = finite_counter(1000);
+    int sum = 0;
+
+    for (auto it = gen.begin(); it != gen.end(); ++it)
+        sum += *it;
+
+    print_and_assert_result("finite_counter_iterator", 500500, sum);
+}
+
+void run_finite_counter_range_for()
 {
     int sum = 0;
 
     for (const auto i : finite_counter(1000))
         sum += i;
 
-    print_and_assert_result("finite_counter", 500500, sum);
+    print_and_assert_result("finite_counter_range_for", 500500, sum);
 }
 
 void benchmark()
@@ -61,7 +72,18 @@ void benchmark()
         assert(sum == 500500);
     });
 
-    ankerl::nanobench::Bench().run("libcoro generator: finite_counter", [] {
+    ankerl::nanobench::Bench().run("libcoro generator: finite_counter (iterator)", [] {
+        auto gen = finite_counter(1000);
+        int sum = 0;
+
+        for (auto it = gen.begin(); it != gen.end(); ++it)
+            sum += *it;
+
+        ankerl::nanobench::doNotOptimizeAway(sum);
+        assert(sum == 500500);
+    });
+
+    ankerl::nanobench::Bench().run("libcoro generator: finite_counter (range-for)", [] {
         int sum = 0;
 
         for (const auto i : finite_counter(1000))
@@ -75,7 +97,8 @@ void benchmark()
 int main()
 {
     run_infinite_counter();
-    run_finite_counter();
+    run_finite_counter_iterator();
+    run_finite_counter_range_for();
 
     benchmark();
 }
