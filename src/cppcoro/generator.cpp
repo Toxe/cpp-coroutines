@@ -4,7 +4,6 @@
 #include "nanobench.h"
 
 #include "cppcoro/generator.hpp"
-#include "cppcoro/sync_wait.hpp"
 
 #include "print_and_assert_result.hpp"
 
