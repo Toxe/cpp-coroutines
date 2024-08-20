@@ -33,9 +33,9 @@ struct Task {
     // Awaiter interface
     bool await_ready() const noexcept { return true; }
     void await_suspend(std::coroutine_handle<>) const noexcept { }
-    T await_resume() const noexcept { return handle_.promise().result_; }
+    T await_resume() const noexcept { return result(); }
 
-    T result()
+    T result() const
     {
         if (!handle_.done())
             handle_.resume();
@@ -49,7 +49,7 @@ Task<uint64_t> fibonacci_coro(const int nth) { co_return fibonacci(nth); }
 void run_simple_tasks()
 {
     const auto double_coro = [](const int n) -> Task<int> { co_return n * 2; };
-    const auto double_100_and_add_coro = [&](const int n) -> Task<int> { co_return double_coro(100).result() + n; };
+    const auto double_100_and_add_coro = [&](const int n) -> Task<int> { co_return co_await double_coro(100) + n; };
 
     print_and_assert_result("double_coro", 400, double_coro(200).result());
     print_and_assert_result("double_100_and_add_coro", 205, double_100_and_add_coro(5).result());
@@ -65,7 +65,7 @@ void benchmark()
 {
     ankerl::nanobench::Bench().run("manual: simple_tasks", [&] {
         const auto double_coro = [](const int n) -> Task<int> { co_return n * 2; };
-        const auto double_100_and_add_coro = [&](const int n) -> Task<int> { co_return double_coro(100).result() + n; };
+        const auto double_100_and_add_coro = [&](const int n) -> Task<int> { co_return co_await double_coro(100) + n; };
 
         const auto a = double_coro(200).result();
         const auto b = double_100_and_add_coro(5).result();
