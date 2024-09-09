@@ -16,10 +16,6 @@
             "version>=": "0.1.7#1"
         },
         {
-            "name": "cppcoro",
-            "version>=": "2022-10-25"
-        },
-        {
             "name": "libcoro",
             "version>=": "0.11.1"
         },
