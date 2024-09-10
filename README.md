@@ -2,6 +2,17 @@
 
 C++ coroutine examples and library comparisons.
 
+## Compiler Support
+
+| System  | Compiler | Status                          |
+| ------- | -------- | ------------------------------- |
+| Linux   | GCC      | OK                              |
+| Linux   | Clang    | `cppcoro` CMake configure error |
+| Windows | MSVC     | OK                              |
+| Windows | Clang-cl | `cppcoro` compile errors        |
+
+## MSVC
+
 |  ns/op |           op/s | err% | total | benchmark                 |
 | -----: | -------------: | ---: | ----: | :------------------------ |
 | 347.17 |   2,880,445.80 | 3.5% |  0.01 | `cppcoro: simple_tasks`   |
