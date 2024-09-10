@@ -3,6 +3,11 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project("C++ Coroutines" LANGUAGES CXX)
 
+if(NOT CMAKE_CXX_STANDARD)
+    message("setting CMAKE_CXX_STANDARD to C++23")
+    set(CMAKE_CXX_STANDARD 23)
+endif()
+
 # testing settings
 include(cmake/Testing.cmake)
 
