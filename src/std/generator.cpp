@@ -1,18 +1,31 @@
 #include <cassert>
+
+#ifdef _MSC_VER
 #include <experimental/generator>
+#else
+#include <generator>
+#endif
+
+#ifdef _MSC_VER
+template <typename T>
+using std_generator = std::experimental::generator<T>;
+#else
+template <typename T>
+using std_generator = std::generator<T>;
+#endif
 
 #define ANKERL_NANOBENCH_IMPLEMENT
 #include "nanobench.h"
 
 #include "print_and_assert_result.hpp"
 
-std::experimental::generator<int> infinite_counter()
+std_generator<int> infinite_counter()
 {
     for (int i = 1;; ++i)
         co_yield i;
 }
 
-std::experimental::generator<int> finite_counter(const int max)
+std_generator<int> finite_counter(const int max)
 {
     assert(max >= 1);
 
