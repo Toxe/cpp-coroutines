@@ -27,7 +27,7 @@ struct Generator {
         std::coroutine_handle<promise_type> handle_{};
 
         bool operator==(std::default_sentinel_t) const { return handle_.done(); }
-        const int operator*() const { return handle_.promise().value_; }
+        int operator*() const { return handle_.promise().value_; }
 
         iterator& operator++()
         {
